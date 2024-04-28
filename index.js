@@ -96,6 +96,13 @@ res.send(result)
       
 })
 
+    
+    app.get('/updateCraft/:id',async (req, res) => {
+      const resul = await craftCollection.findOne({ _id: new ObjectId(req.params.id) })
+      console.log(resul)
+      res.send(resul)
+    })
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
