@@ -32,6 +32,8 @@ async function run() {
 
       const craftCollection = client.db('craftDB').collection('craft');
 
+
+    // all clint add craft 
       app.get('/craft', async (req, res) => {
           const cursor = craftCollection.find();
           result = await cursor.toArray();
@@ -49,10 +51,16 @@ async function run() {
 })
 
 
-      
-      
+      // my add craft
+    app.get('/myArt/:email', async (req, res) => {
+      console.log('console hobe',req.params.email)
+      const result = await craftCollection.find({ id: req.params.email }).toArray();
+      res.send(result)
+
+      })
 
 
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
