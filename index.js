@@ -85,6 +85,17 @@ async function run() {
       res.send(result);
 
     });
+    // update code end---------
+    
+
+    // delet medthod------
+    app.delete("/delete/:id",async (req, res) => {
+      const result = await craftCollection.deleteOne({ _id: new ObjectId(req.params.id) })
+      console.log(result);
+res.send(result)
+      
+})
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
