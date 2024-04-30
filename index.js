@@ -44,6 +44,15 @@ async function run() {
       res.send(result);
 })
  
+    
+    app.get("/singleDetails/:id", async (req, res) => {
+      const result = await allCategories.findOne({
+        _id: new ObjectId(req.params.id),
+      })
+      res.send(result);
+    });
+    
+    
 
     // all clint add craft
     app.get("/craft", async (req, res) => {
