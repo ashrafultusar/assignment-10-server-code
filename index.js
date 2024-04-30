@@ -43,8 +43,7 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
 })
-
-
+ 
 
     // all clint add craft
     app.get("/craft", async (req, res) => {
