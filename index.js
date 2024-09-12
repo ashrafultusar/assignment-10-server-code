@@ -11,13 +11,19 @@ const port = process.env.PORT || 5000;
 // https://art-and-craft-store-server-ioz1o3buw.vercel.app
 // http://localhost:5173
 
-
 // midelware
-app.use(cors({ origin: ["http://localhost:5173","https://art-and-craft-authentaction.web.app","https://art-and-craft-authentaction.firebaseapp.com"]}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://art-and-craft-authentaction.web.app",
+    ],
+  })
+);
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_user}:${process.env.DB_password}@cluster0.hzcboi3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-console.log(uri);
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -34,25 +40,22 @@ async function run() {
     // await client.connect();
 
     const craftCollection = client.db("craftDB").collection("craft");
-    
+
     const allCategories = client.db("craftDB").collection("categories");
 
-// all catagories
+    // all catagories
     app.get("/categories", async (req, res) => {
       const cursor = allCategories.find();
       const result = await cursor.toArray();
       res.send(result);
-})
- 
-    
+    });
+
     app.get("/singleDetails/:id", async (req, res) => {
       const result = await allCategories.findOne({
         _id: new ObjectId(req.params.id),
-      })
+      });
       res.send(result);
     });
-    
-    
 
     // all clint add craft
     app.get("/craft", async (req, res) => {
@@ -71,7 +74,7 @@ async function run() {
 
     // my add craft
     app.get("/myArt/:email", async (req, res) => {
-      console.log("console hobe", req.params.email);
+      // console.log("console hobe", req.params.email);
       const result = await craftCollection
         .find({ id: req.params.email })
         .toArray();
@@ -106,29 +109,28 @@ async function run() {
           stockStatus: req.body.stockStatus,
         },
       };
-      const result= await craftCollection.updateOne(query,data)
+      const result = await craftCollection.updateOne(query, data);
       console.log(result);
       res.send(result);
-
     });
     // update code end---------
-    
 
     // delet medthod------
-    app.delete("/delete/:id",async (req, res) => {
-      const result = await craftCollection.deleteOne({ _id: new ObjectId(req.params.id) })
+    app.delete("/delete/:id", async (req, res) => {
+      const result = await craftCollection.deleteOne({
+        _id: new ObjectId(req.params.id),
+      });
       console.log(result);
-res.send(result)
-      
-})
+      res.send(result);
+    });
 
-    
-    app.get('/updateCraft/:id',async (req, res) => {
-      const resul = await craftCollection.findOne({ _id: new ObjectId(req.params.id) })
-      console.log(resul)
-      res.send(resul)
-    })
-    
+    app.get("/updateCraft/:id", async (req, res) => {
+      const resul = await craftCollection.findOne({
+        _id: new ObjectId(req.params.id),
+      });
+      console.log(resul);
+      res.send(resul);
+    });
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
